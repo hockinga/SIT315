@@ -138,12 +138,12 @@ int main()
         tmp_nums[i] = rand() % 100;
     }
 
-    // sequential quicksort
+    // Sequential quicksort
     reset_nums();
     int duration = time_quicksort(sequential_quicksort);
     cout << "Sequntial: " << duration << endl;
 
-    // pthread quicksort
+    // Parallel quicksort
     reset_nums();
     duration = time_quicksort(parallel_quicksort);
     cout << "Parallel:  " << duration << endl;
