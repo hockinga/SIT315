@@ -5,7 +5,6 @@
 #include <omp.h>
 
 using namespace std;
-using chrono::high_resolution_clock, chrono::duration_cast, chrono::nanoseconds;
 
 const int N = 100;                                  // Matrix size
 const int THREADS = 16;                             // Number of threads
@@ -101,10 +100,10 @@ void row_multiply(int i)
 template<typename func>
 int time_multiply(func &fn)
 {
-    auto start = high_resolution_clock::now();
+    auto start = chrono::high_resolution_clock::now();
     fn();
-    auto end = high_resolution_clock::now();
-    return duration_cast<nanoseconds>(end - start).count();
+    auto end = chrono::high_resolution_clock::now();
+    return chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 }
 
 /**
