@@ -1,7 +1,5 @@
-#include <vector>
 #include <chrono>
 #include <fstream>
-#include <functional>
 #include <pthread.h>
 #include <math.h>
 #include <omp.h>
@@ -13,9 +11,7 @@ const int N = 100;                                  // Matrix size
 const int THREADS = 16;                             // Number of threads
 const int THREAD_ROWS = ceil((float)N / THREADS);   // Number of rows to compute per thread
 
-vector<vector<int> > A;
-vector<vector<int> > B;
-vector<vector<int> > C;
+int A[N][N], B[N][N], C[N][N];
 
 /**
  * @brief Writes a matrix to a file
@@ -23,7 +19,7 @@ vector<vector<int> > C;
  * @param M Matrix to write
  * @param file Name of the file to write to
  */
-void write_matrix(vector<vector<int> > M, ofstream &file)
+void write_matrix(int (&M)[N][N], ofstream &file)
 {
     for (int i = 0; i < N; i++)
     {
@@ -60,26 +56,20 @@ void write(int duration, string fname)
 }
 
 /**
- * @brief Creates an NxN matrix with random numbers from 0 to 9
+ * @brief Fill a matrix with random integers
  * 
- * @return vector<vector<int> > The created NxN matrix
+ * @param matrix Matrix to fill with random integers
  */
-vector<vector<int> > create_matrix()
+void rand_matrix(int (&M)[N][N])
 {
-    // Init matrix
-    vector<vector<int> > M;
-
     // Fill with random numbers from 0-9
     for (int i = 0; i < N; i++)
     {
-        vector<int> row_vector;
         for (int j = 0; j < N; j++)
         {
-            row_vector.push_back(rand() % 10);
+            M[i][j] = (rand() % 10);
         }
-        M.push_back(row_vector);
     }
-    return M;
 }
 
 /**
@@ -194,25 +184,22 @@ void openmp_multiply()
 
 int main()
 {
-    // Create A, B and C matrices
-    A = create_matrix();
-    B = create_matrix();
+    // Randomly fill A and B
+    rand_matrix(A);
+    rand_matrix(B);
 
     // Store time taken to multiply
     int duration;
 
     // Sequential multiplication
-    C = create_matrix();
     duration = time_multiply(sequential_multiply);
     write(duration, "sequential.txt");
 
     // P Thread multiplication
-    C = create_matrix();
     duration = time_multiply(pthread_multiply);
     write(duration, "pthread.txt");
 
     // OpenMP multiplication
-    C = create_matrix();
     duration = time_multiply(openmp_multiply);
     write(duration, "openmp.txt");
 
