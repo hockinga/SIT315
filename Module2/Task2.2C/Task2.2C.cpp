@@ -2,11 +2,10 @@
 #include <iostream>
 
 using namespace std;
-using chrono::high_resolution_clock, chrono::duration_cast, chrono::nanoseconds;
 
-const int N = 100000;
-int tmp_nums[N];
-int nums[N];
+const int N = 100000;   // Array length
+int tmp_nums[N];        // Holds unsorted numbers
+int nums[N];            // Holds sorted numbers
 
 /**
  * @brief Resets the nums array to its previous random numbers
@@ -124,10 +123,10 @@ void parallel_quicksort(int lo = 0, int hi = N-1)
 template<typename func>
 int time_quicksort(func &fn)
 {
-    auto start = high_resolution_clock::now();
+    auto start = chrono::high_resolution_clock::now();
     fn(0, N-1);
-    auto end = high_resolution_clock::now();
-    return duration_cast<nanoseconds>(end - start).count();
+    auto end = chrono::high_resolution_clock::now();
+    return chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 }
 
 int main()
